@@ -1,13 +1,8 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+import React, { useState, ReactNode, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useTransform } from "motion/react";
+import { HelpCircle, MapPin, Clock, Info, Heart, CheckCircle2, Flower2, Music, Volume2, VolumeX, Sparkles, Calendar } from "lucide-react";
 
-import { useState, ReactNode } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { HelpCircle, MapPin, Clock, Info, Heart, CheckCircle2, Flower2 } from "lucide-react";
-
-// FlipCard Component
+// FlipCard Component with 3D Tilt Effect
 function FlipCard({ front, back, className, containerClassName, rounded = "rounded-[2rem]", ...motionProps }: {
   front: ReactNode,
   back: ReactNode,
@@ -17,14 +12,46 @@ function FlipCard({ front, back, className, containerClassName, rounded = "round
   [key: string]: any
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [-100, 100], [15, -15]);
+  const rotateY = useTransform(x, [-100, 100], [-15, 15]);
+
+  const springConfig = { damping: 20, stiffness: 300 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+  const springRotateX = useSpring(rotateX, springConfig);
+  const springRotateY = useSpring(rotateY, springConfig);
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    x.set(event.clientX - centerX);
+    y.set(event.clientY - centerY);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+    setIsFlipped(false);
+  }
 
   return (
     <motion.div
       {...motionProps}
+      ref={cardRef}
       className={`perspective-1000 cursor-pointer ${containerClassName || ""}`}
+      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
+      onMouseLeave={handleMouseLeave}
       onClick={() => setIsFlipped(!isFlipped)}
+      style={{
+        rotateX: isFlipped ? 0 : springRotateX,
+        rotateY: isFlipped ? 0 : springRotateY,
+      }}
     >
       <motion.div
         initial={false}
@@ -33,17 +60,24 @@ function FlipCard({ front, back, className, containerClassName, rounded = "round
         className={`w-full h-full transform-style-3d relative ${className || ""}`}
       >
         {/* Front */}
-        <div className={`absolute inset-0 backface-hidden w-full h-full ${rounded} overflow-hidden`}>
+        <div className={`absolute inset-0 backface-hidden w-full h-full ${rounded} overflow-hidden shadow-2xl border border-white/40 ring-1 ring-black/5`}>
           {front}
+          {/* Subtle Corner Ornament */}
+          <div className="absolute top-3 left-3 w-6 h-6 border-t border-l border-white/30 rounded-tl-lg" />
+          <div className="absolute bottom-3 right-3 w-6 h-6 border-b border-r border-white/30 rounded-br-lg" />
         </div>
 
         {/* Back */}
         <div
           style={{ transform: "rotateY(180deg)" }}
-          className={`absolute inset-0 backface-hidden w-full h-full bg-paper/95 backdrop-blur-md border border-sage/20 ${rounded} flex flex-col justify-center items-center text-center p-3 md:p-8 shadow-2xl overflow-hidden`}
+          className={`absolute inset-0 backface-hidden w-full h-full bg-paper/95 backdrop-blur-xl border border-sage/20 ${rounded} flex flex-col justify-center items-center text-center p-3 md:p-8 shadow-2xl overflow-y-auto overflow-x-hidden`}
         >
           <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] pointer-events-none" />
-          <div className="relative z-10 w-full h-full flex flex-col">
+          {/* Decorative Corner Ornaments */}
+          <div className="absolute top-5 left-5 w-10 h-10 border-t-2 border-l-2 border-sage/10 rounded-tl-xl" />
+          <div className="absolute bottom-5 right-5 w-10 h-10 border-b-2 border-r-2 border-sage/10 rounded-br-xl" />
+
+          <div className="relative z-10 w-full h-full flex flex-col py-4">
             {back}
           </div>
         </div>
@@ -52,9 +86,69 @@ function FlipCard({ front, back, className, containerClassName, rounded = "round
   );
 }
 
+// Realistic Organic Petal Component
+function RealisticPetal({ size = 20, className = "" }: { size?: number, className?: string }) {
+  const organicPetal = "M15 30C15 30 0 25 0 15C0 5 10 0 15 0C20 0 30 5 30 15C30 25 15 30 15 30Z";
+
+  return (
+    <motion.div
+      animate={{
+        rotateX: [0, 45, -45, 0],
+        rotateY: [0, 180, 360],
+      }}
+      transition={{
+        duration: 3 + Math.random() * 2,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      style={{ width: size, height: size }}
+      className={className}
+    >
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 30 30"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="petalGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#f7d7d3" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#E5B2AD" stopOpacity="0.7" />
+          </radialGradient>
+        </defs>
+        <path
+          d={organicPetal}
+          fill="url(#petalGrad)"
+          style={{ filter: "drop-shadow(0px 2px 2px rgba(0,0,0,0.05))" }}
+        />
+      </svg>
+    </motion.div>
+  );
+}
+
 export default function App() {
   const [isFlapOpen, setIsFlapOpen] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hearts, setHearts] = useState<{ id: number; x: number; y: number }[]>([]);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const addHeart = (e: React.MouseEvent | React.TouchEvent) => {
+    const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    const id = Date.now();
+    setHearts(prev => [...prev, { id, x, y }]);
+    setTimeout(() => {
+      setHearts(prev => prev.filter(h => h.id !== id));
+    }, 1000);
+  };
 
   const handleOpen = () => {
     setIsFlapOpen(true);
@@ -65,7 +159,45 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-zinc-800 selection:bg-sage/20 overflow-x-hidden relative">
+    <div
+      className="min-h-screen bg-paper text-zinc-800 selection:bg-sage/20 overflow-x-hidden relative"
+      onMouseDown={addHeart}
+      onTouchStart={addHeart}
+    >
+      {/* Scroll Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-sage origin-left z-[1000]"
+        style={{ scaleX }}
+      />
+
+      {/* Music Toggle */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setIsMuted(!isMuted)}
+        className="fixed bottom-6 right-6 z-[500] w-12 h-12 rounded-full bg-sage text-white shadow-2xl flex items-center justify-center backdrop-blur-md border border-white/20"
+      >
+        {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} className="animate-pulse" />}
+      </motion.button>
+
+      {/* Floating Sparkle Hearts on Click */}
+      <AnimatePresence>
+        {hearts.map(heart => (
+          <motion.div
+            key={heart.id}
+            initial={{ opacity: 1, scale: 0, y: 0, x: -10 }}
+            animate={{ opacity: 0, scale: 1.5, y: -100, x: (Math.random() - 0.5) * 100 }}
+            exit={{ opacity: 0 }}
+            className="fixed pointer-events-none z-[999] text-sage/40"
+            style={{ left: heart.x, top: heart.y }}
+          >
+            <Heart fill="currentColor" size={Math.random() * 20 + 10} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
       <AnimatePresence>
         {!isOpened && (
           <motion.div
@@ -131,55 +263,98 @@ export default function App() {
               />
 
               {/* Natural floating dust motes / glowing ambient petals */}
-              {[...Array(30)].map((_, i) => (
+              {[...Array(40)].map((_, i) => (
                 <motion.div
                   key={`dust-${i}`}
-                  className="absolute rounded-full shadow-[0_0_15px_2px_rgba(229,178,173,0.6)]"
+                  className="absolute pointer-events-none"
                   style={{
-                    backgroundColor: i % 2 === 0 ? '#E5B2AD' : '#A4B2A5', // Blush and Sage
-                    width: Math.random() * 8 + 3 + "px",
-                    height: Math.random() * 8 + 3 + "px",
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
-                    filter: `blur(${Math.random() * 1}px)`,
                   }}
                   animate={{
-                    y: [0, -Math.random() * 400 - 200],
-                    x: [0, (Math.random() - 0.5) * 150],
-                    opacity: [0, Math.random() * 0.7 + 0.3, 0],
-                    scale: [0.8, 1.5, 0.8]
+                    y: [0, -Math.random() * 500 - 300],
+                    x: [0, (Math.random() - 0.5) * 200],
+                    rotate: [0, Math.random() * 360],
+                    opacity: [0, Math.random() * 0.5 + 0.2, 0],
+                    scale: [0.5, Math.random() * 1 + 0.5, 0.5]
                   }}
                   transition={{
-                    duration: 12 + Math.random() * 18,
+                    duration: 10 + Math.random() * 20,
                     repeat: Infinity,
                     delay: Math.random() * 10,
                     ease: "easeInOut",
                   }}
-                />
+                >
+                  {i % 4 === 0 ? (
+                    <Flower2 className="text-sage/20 w-4 h-4 md:w-6 md:h-6" />
+                  ) : (
+                    <div
+                      className="rounded-full shadow-[0_0_15px_rgba(229,178,173,0.4)]"
+                      style={{
+                        backgroundColor: i % 2 === 0 ? '#E5B2AD' : '#D4AF37', // Blush and Gold
+                        width: Math.random() * 6 + 2 + "px",
+                        height: Math.random() * 6 + 2 + "px",
+                        filter: `blur(${Math.random() * 1}px)`,
+                      }}
+                    />
+                  )}
+                </motion.div>
               ))}
+
+              {/* Enhanced Falling Hearts & Rose Petals specifically for Loading State */}
+              {[...Array(20)].map((_, i) => {
+                const isHeart = i % 2 === 0;
+                const size = isHeart ? Math.random() * 20 + 10 : Math.random() * 25 + 15;
+                return (
+                  <motion.div
+                    key={`loading-falling-${i}`}
+                    className="absolute pointer-events-none z-10"
+                    initial={{ top: "-10%", left: `${Math.random() * 100}%`, rotate: 0, opacity: 0 }}
+                    animate={{
+                      top: "110%",
+                      left: [`${Math.random() * 100}%`, `${Math.random() * 100 + (Math.random() - 0.5) * 20}%`, `${Math.random() * 100}%`],
+                      rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
+                      opacity: [0, 0.6, 0]
+                    }}
+                    transition={{
+                      duration: 15 + Math.random() * 15,
+                      repeat: Infinity,
+                      delay: Math.random() * 10,
+                      ease: "linear"
+                    }}
+                  >
+                    {isHeart ? (
+                      <Heart className="text-sage" fill="currentColor" size={size} />
+                    ) : (
+                      <RealisticPetal size={size} />
+                    )}
+                  </motion.div>
+                );
+              })}
+
               {/* Heavy out-of-focus organic "bokeh" foreground orbs */}
-              {[...Array(15)].map((_, i) => (
+              {[...Array(12)].map((_, i) => (
                 <motion.div
                   key={`bokeh-${i}`}
-                  className="absolute rounded-full mix-blend-multiply"
+                  className="absolute rounded-full mix-blend-soft-light"
                   style={{
-                    backgroundColor: i % 3 === 0 ? '#A4B2A5' : '#E5B2AD', // Sage and Blush
-                    opacity: 0.6,
-                    width: Math.random() * 100 + 40 + "px",
-                    height: Math.random() * 100 + 40 + "px",
+                    backgroundColor: i % 2 === 0 ? '#A4B2A5' : '#FDFBF7',
+                    opacity: 0.3,
+                    width: Math.random() * 150 + 100 + "px",
+                    height: Math.random() * 150 + 100 + "px",
                     left: `${Math.random() * 100}%`,
                     bottom: `-20%`,
-                    filter: `blur(${Math.random() * 10 + 6}px)`,
+                    filter: `blur(${Math.random() * 20 + 30}px)`,
                   }}
                   animate={{
-                    y: [0, typeof window !== 'undefined' ? -(window.innerHeight + 200) : -1000],
-                    x: [0, (Math.random() - 0.5) * 300],
-                    opacity: [0, Math.random() * 0.6 + 0.4, 0],
+                    y: [0, -1200],
+                    x: [(Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400],
+                    opacity: [0, 0.4, 0],
                   }}
                   transition={{
-                    duration: 20 + Math.random() * 30,
+                    duration: 25 + Math.random() * 35,
                     repeat: Infinity,
-                    delay: Math.random() * 15,
+                    delay: Math.random() * 20,
                     ease: "linear",
                   }}
                 />
@@ -260,9 +435,9 @@ export default function App() {
         <img
           src="/background.png"
           alt="Background"
-          className="w-full h-full object-cover opacity-[0.15] md:opacity-[0.25]"
+          className="w-full h-full object-cover opacity-[0.35] md:opacity-[0.45]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-paper/60 via-paper/10 to-paper/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-paper/40 via-transparent to-paper/40" />
       </div>
 
       {/* Main Container */}
@@ -275,23 +450,64 @@ export default function App() {
 
         {/* Header Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isOpened ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
-          className="text-center space-y-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isOpened ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          className="text-center space-y-4 md:space-y-8 mt-4 md:mt-12"
         >
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isOpened ? { opacity: 0.6 } : { opacity: 0 }}
-            transition={{ delay: 1.2, duration: 1 }}
-            className="text-xs uppercase tracking-[0.5em] text-sage font-bold"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isOpened ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="flex items-center justify-center gap-4 text-sage/60"
           >
-            With joy in our hearts
-          </motion.p>
-          <h1 className="serif italic text-6xl md:text-9xl text-sage font-light leading-tight drop-shadow-sm">
-            You're Invited!
+            <div className="h-px w-8 md:w-16 bg-current opacity-30" />
+            <p className="text-[10px] md:text-sm uppercase tracking-[0.6em] font-bold">
+              With joy in our hearts
+            </p>
+            <div className="h-px w-8 md:w-16 bg-current opacity-30" />
+          </motion.div>
+
+          <h1 className="flex flex-col items-center px-4">
+            <span className="serif italic text-4xl md:text-[10rem] text-sage font-light leading-tight drop-shadow-sm mb-2 md:mb-6">
+              You're Invited!
+            </span>
+            <span className="serif text-lg md:text-4xl text-sage/40 tracking-[0.2em] md:tracking-[0.3em] uppercase font-light">to the wedding of</span>
           </h1>
-          <div className="w-32 h-px bg-sage/40 mx-auto mt-8" />
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-16 mt-8 relative">
+            {/* Subtle Glow Backdrop */}
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-32 bg-sage/5 blur-3xl rounded-full" />
+
+            <motion.h2
+              whileHover={{ scale: 1.05 }}
+              className="script text-7xl md:text-9xl text-sage drop-shadow-lg relative z-10"
+            >
+              Aaron
+            </motion.h2>
+
+            <div className="relative my-4 md:my-0 flex items-center justify-center">
+              <div className="h-px w-12 md:w-24 bg-sage/20 hidden md:block" />
+              <div className="relative mx-4">
+                <Heart className="text-sage/40 w-8 h-8 md:w-10 md:h-10 animate-pulse" fill="currentColor" />
+                <motion.div
+                  animate={{ scale: [1, 1.5, 1], opacity: [0, 1, 0] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="absolute inset-0 bg-sage/20 blur-xl rounded-full"
+                />
+              </div>
+              <div className="h-px w-12 md:w-24 bg-sage/20 hidden md:block" />
+            </div>
+
+            <motion.h2
+              whileHover={{ scale: 1.05 }}
+              className="script text-7xl md:text-9xl text-sage drop-shadow-lg relative z-10"
+            >
+              Denice
+            </motion.h2>
+          </div>
+
+          <div className="w-24 md:w-32 h-px bg-gradient-to-r from-transparent via-sage/40 to-transparent mx-auto mt-8" />
         </motion.div>
 
         {/* Top Envelope Graphic - Centered at the top */}
@@ -343,237 +559,419 @@ export default function App() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10 relative">
 
           {/* Details Flip Card */}
-          <FlipCard
-            containerClassName="w-full col-span-1 h-[180px] md:h-[350px] lg:h-[350px]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={isOpened ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 1, delay: 1 }}
-            front={
-              <div className="bg-zinc-800 text-white w-full h-full p-10 flex flex-col justify-center items-center text-center group hover:bg-sage transition-all duration-700">
-                <p className="serif italic text-[10px] md:text-sm mb-2 opacity-70 group-hover:opacity-100 transition-opacity">Explore every</p>
-                <h3 className="serif text-2xl md:text-4xl tracking-[0.2em] uppercase font-medium">Details</h3>
-                <div className="mt-4 opacity-30 group-hover:opacity-100 transition-opacity">
-                  <Info size={24} />
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="w-full h-full col-span-1"
+          >
+            <FlipCard
+              containerClassName="w-full h-[220px] md:h-[350px] lg:h-[350px]"
+              front={
+                <div className="w-full h-full relative overflow-hidden bg-[#1a1a1a] flex flex-col justify-center items-center text-center p-6 group">
+                  {/* Botanical Background Pattern */}
+                  <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/floral-paper.png')] pointer-events-none" />
+                  {/* Gold Leaf Corner Decorative SVGs would go here, using shadows for now */}
+                  <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-[#D4AF37]/20 to-transparent blur-2xl" />
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-[#D4AF37]/20 to-transparent blur-2xl" />
+
+                  <div className="relative z-10 space-y-4">
+                    <motion.div
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 4 }}
+                      className="text-[#D4AF37] opacity-60 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Info size={32} />
+                    </motion.div>
+                    <div>
+                      <p className="serif italic text-[10px] md:text-sm text-[#D4AF37] mb-1 uppercase tracking-[0.3em]">Explore</p>
+                      <h3 className="serif text-2xl md:text-4xl text-white tracking-[0.1em] font-light">The Details</h3>
+                    </div>
+                    <div className="w-8 h-px bg-[#D4AF37]/50 mx-auto group-hover:w-16 transition-all duration-700" />
+                  </div>
                 </div>
-              </div>
-            }
-            back={
-              <>
-                <h4 className="serif text-xl md:text-3xl text-sage mb-4 md:mb-6">Ceremony Details</h4>
-                <div className="space-y-1 md:space-y-4 text-[10px] md:text-sm text-zinc-600 w-full px-1 md:px-4">
-                  <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
-                    <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Dress Code</span>
-                    <span className="serif italic text-[10px] md:text-sm">Formal / Earth</span>
+              }
+              back={
+                <>
+                  <h4 className="serif text-xl md:text-3xl text-sage mb-4 md:mb-6">Ceremony Details</h4>
+                  <div className="space-y-1 md:space-y-4 text-[10px] md:text-sm text-zinc-600 w-full px-1 md:px-4">
+                    <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
+                      <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Dress Code</span>
+                      <span className="serif italic text-[10px] md:text-sm">Formal / Earth</span>
+                    </div>
+                    <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
+                      <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Gifts</span>
+                      <span className="serif italic text-[10px] md:text-sm">Monetary</span>
+                    </div>
+                    <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
+                      <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Adults Only</span>
+                      <span className="serif italic text-[10px] md:text-sm">Strictly 18+</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
-                    <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Gifts</span>
-                    <span className="serif italic text-[10px] md:text-sm">Monetary</span>
-                  </div>
-                  <div className="flex justify-between border-b border-sage/20 pb-1 md:pb-2">
-                    <span className="font-bold tracking-widest uppercase text-[8px] md:text-xs">Adults Only</span>
-                    <span className="serif italic text-[10px] md:text-sm">Strictly 18+</span>
-                  </div>
-                </div>
-                <button className="mt-4 md:mt-8 text-[8px] md:text-xs uppercase tracking-[0.2em] font-bold text-sage underline underline-offset-4">Close Details</button>
-              </>
-            }
-          />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-4 md:mt-8 text-[8px] md:text-xs uppercase tracking-[0.2em] font-bold text-sage underline underline-offset-4"
+                  >Close Details</motion.button>
+                </>
+              }
+            />
+          </motion.div>
 
           {/* Save the Date Flip Card */}
-          <FlipCard
-            containerClassName="w-full col-span-1 h-[180px] md:h-[350px] lg:h-[350px]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={isOpened ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 1, delay: 1.1 }}
-            front={
-              <div className="bg-white/70 backdrop-blur-sm w-full h-full p-4 md:p-6 flex flex-col items-center justify-center text-center space-y-4 md:space-y-6 border border-white">
-                <p className="serif italic text-xl md:text-3xl text-sage">Save the Date</p>
-                <div className="space-y-1 md:space-y-2">
-                  <p className="text-xs uppercase tracking-[0.4em] text-zinc-400 font-bold">Sunday</p>
-                  <div className="flex flex-col items-center">
-                    <div className="h-px w-10 md:w-16 bg-sage/30 mb-1 md:mb-2" />
-                    <p className="serif text-lg md:text-3xl font-light tracking-[0.15em]">DECEMBER</p>
-                    <p className="serif text-4xl md:text-7xl font-medium -mt-1 md:-mt-2 text-sage">14</p>
-                    <div className="h-px w-10 md:w-16 bg-sage/30 mt-1 md:mt-2" />
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full h-full col-span-1"
+          >
+            <FlipCard
+              containerClassName="w-full h-[220px] md:h-[350px] lg:h-[350px]"
+              front={
+                <div className="w-full h-full bg-[#fdfbf7] p-2 md:p-8 flex flex-col items-center justify-center text-center space-y-2 md:space-y-4 relative group">
+                  {/* Subtle Paper Texture Overlay */}
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] opacity-40 pointer-events-none" />
+
+                  {/* Letterpress Look */}
+                  <div className="relative z-10 space-y-2 md:space-y-8 scale-[0.9] md:scale-100">
+                    <div className="space-y-1">
+                      <span className="serif italic text-[14px] md:text-2xl text-sage/70">Save the Date</span>
+                      <div className="w-full h-px bg-sage/20" />
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      <p className="text-[8px] md:text-xs uppercase tracking-[0.4em] text-zinc-400 font-black mb-1 md:mb-2">Sunday</p>
+                      <div className="relative inline-block px-6 md:px-8 py-1 md:py-2 border-y border-sage/30">
+                        <p className="serif text-5xl md:text-8xl font-medium text-sage leading-none">14</p>
+                        <motion.div
+                          animate={{ opacity: [0.4, 1, 0.4] }}
+                          transition={{ repeat: Infinity, duration: 2 }}
+                          className="absolute -top-1 -right-1 text-[#D4AF37]"
+                        >
+                          <Sparkles size={12} className="md:w-4 md:h-4" />
+                        </motion.div>
+                      </div>
+                      <p className="serif text-sm md:text-2xl font-light tracking-[0.2em] mt-2 md:mt-3">DECEMBER</p>
+                    </div>
+
+                    <div className="pt-1">
+                      <p className="text-[7px] md:text-xs uppercase tracking-[0.4em] md:tracking-[0.5em] font-black text-sage/40">Twenty Twenty Five</p>
+                    </div>
                   </div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-zinc-400 font-bold">2025</p>
+
+                  {/* "Torn Paper" Edge Effect at the bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 h-4 bg-paper clip-path-[polygon(0%_100%,_5%_80%,_10%_100%,_15%_80%,_20%_100%,_25%_80%,_30%_100%,_35%_80%,_40%_100%,_45%_80%,_50%_100%,_55%_80%,_60%_100%,_65%_80%,_70%_100%,_75%_80%,_80%_100%,_85%_80%,_90%_100%,_95%_80%,_100%_100%)] opacity-50" />
                 </div>
-                <div className="pt-1 md:pt-2">
-                  <p className="text-[8px] md:text-xs uppercase tracking-[0.3em] font-bold text-sage/70">Jardin de Josefina</p>
-                </div>
-              </div>
-            }
-            back={
-              <>
-                <Heart size={20} className="text-sage mb-2 md:mb-6 mx-auto opacity-70 md:w-8 md:h-8" />
-                <p className="serif text-[14px] md:text-2xl italic text-sage mb-2 md:mb-4 leading-relaxed">Save the date <br /> to celebrate our union.</p>
-                <p className="text-[8px] md:text-xs text-zinc-500 uppercase tracking-widest leading-loose">
-                  Ensure to mark your calendar.<br />Formal invitation to follow.
-                </p>
-              </>
-            }
-          />
+              }
+              back={
+                <>
+                  <Heart size={20} className="text-sage mb-2 md:mb-6 mx-auto opacity-70 md:w-8 md:h-8" />
+                  <p className="serif text-[14px] md:text-2xl italic text-sage mb-2 md:mb-4 leading-relaxed">Save the date <br /> to celebrate our union.</p>
+                  <p className="text-[8px] md:text-xs text-zinc-500 uppercase tracking-widest leading-loose">
+                    Ensure to mark your calendar.<br />Formal invitation to follow.
+                  </p>
+                </>
+              }
+            />
+          </motion.div>
 
           {/* RSVP Flip Card */}
-          <FlipCard
-            containerClassName="w-full col-span-1 h-[180px] md:h-[350px] lg:h-[350px]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={isOpened ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            front={
-              <div className="bg-white/80 backdrop-blur-sm w-full h-full p-4 md:p-10 border border-white flex flex-col justify-center items-center text-center group hover:bg-white hover:shadow-2xl transition-all duration-700">
-                <p className="serif italic text-[10px] md:text-lg text-sage mb-1 md:mb-2 group-hover:scale-110 transition-transform">Kindly</p>
-                <h3 className="serif text-4xl md:text-6xl tracking-tighter font-medium text-sage">RSVP</h3>
-                <div className="mt-6 flex flex-col items-center">
-                  <p className="text-xs text-zinc-400 uppercase tracking-[0.5em]">here</p>
-                  <div className="w-0 h-px bg-sage mt-2 group-hover:w-16 transition-all duration-500" />
-                </div>
-              </div>
-            }
-            back={
-              <>
-                <CheckCircle2 size={24} className="text-sage mb-2 md:mb-4 mx-auto opacity-70 md:w-8 md:h-8" />
-                <h4 className="serif text-xl md:text-3xl text-sage mb-2 md:mb-4">Are you attending?</h4>
-                <p className="text-[8px] md:text-xs text-zinc-500 uppercase tracking-widest mb-4 md:mb-8">
-                  Please let us know by<br />November 1st, 2025
-                </p>
-                <div className="w-full flex gap-2 md:gap-4 px-2 md:px-4">
-                  <button className="flex-1 bg-sage text-white py-2 md:py-3 rounded-xl text-[8px] md:text-xs uppercase tracking-widest font-bold hover:bg-zinc-800 transition-colors">Yes</button>
-                  <button className="flex-1 border border-sage text-sage py-2 md:py-3 rounded-xl text-[8px] md:text-xs uppercase tracking-widest font-bold hover:bg-sage/10 transition-colors">No</button>
-                </div>
-              </>
-            }
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-full h-full col-span-1"
+          >
+            <FlipCard
+              containerClassName="w-full h-[220px] md:h-[350px] lg:h-[350px]"
+              front={
+                <div className="w-full h-full bg-[#f8f5f0] p-6 flex flex-col justify-center items-center text-center relative group overflow-hidden">
+                  {/* Wax Seal Circle Background Shadow */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-sage/5 rounded-full blur-3xl pointer-events-none" />
 
-          {/* FAQ Flip Card (Circular style adapter) */}
-          <FlipCard
-            containerClassName="w-full col-span-1 flex items-center justify-center h-[180px] md:h-[350px] lg:h-[350px]"
-            rounded="rounded-full"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isOpened ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 100, damping: 15, delay: 1.3 }}
-            className="w-36 h-36 md:w-56 md:h-56 shadow-2xl"
-            front={
-              <div className="w-full h-full bg-sage flex flex-col items-center justify-center text-white group hover:scale-105 hover:rotate-6 transition-all duration-500 relative">
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <p className="serif italic text-[10px] md:text-sm opacity-80 mb-1 md:mb-2">Have questions?</p>
-                <h3 className="serif text-2xl md:text-4xl tracking-widest uppercase">Faqs</h3>
-                <div className="mt-2 md:mt-4 p-2 rounded-full border border-white/20 group-hover:bg-white group-hover:text-sage transition-all">
-                  <HelpCircle size={24} />
+                  <div className="relative z-10 space-y-6">
+                    <p className="serif italic text-lg md:text-2xl text-sage/60 group-hover:scale-110 transition-transform">Kindly</p>
+
+                    {/* Wax Seal Implementation */}
+                    <div className="relative w-24 h-24 md:w-36 md:h-36 flex items-center justify-center">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                        className="absolute inset-0 border border-sage/10 rounded-full border-dashed"
+                      />
+                      <div className="w-16 h-16 md:w-28 md:h-28 bg-sage rounded-full flex items-center justify-center shadow-xl border-4 border-sage/50 relative overflow-hidden group-hover:scale-110 transition-transform duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
+                        <p className="serif text-white font-bold text-3xl md:text-6xl tracking-tighter drop-shadow-md">A&D</p>
+                      </div>
+                    </div>
+
+                    <h3 className="serif text-2xl md:text-4xl tracking-[0.3em] font-medium text-sage">RSVP</h3>
+                  </div>
                 </div>
-              </div>
-            }
-            back={
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-paper">
-                <HelpCircle size={28} className="text-sage mb-2 opacity-70" />
-                <p className="text-[10px] text-zinc-600 uppercase tracking-widest font-bold mb-2">Parking?</p>
-                <p className="serif text-xs italic mb-4">Yes, free parking available.</p>
-                <p className="text-[10px] text-zinc-600 uppercase tracking-widest font-bold mb-2">Indoors?</p>
-                <p className="serif text-xs italic">Partial outdoors.</p>
-              </div>
-            }
-          />
+              }
+              back={
+                <>
+                  <CheckCircle2 size={24} className="text-sage mb-2 md:mb-4 mx-auto opacity-70 md:w-8 md:h-8" />
+                  <h4 className="serif text-xl md:text-3xl text-sage mb-2 md:mb-4">Are you attending?</h4>
+                  <p className="text-[8px] md:text-xs text-zinc-500 uppercase tracking-widest mb-4 md:mb-8">
+                    Please let us know by<br />November 1st, 2025
+                  </p>
+                  <div className="w-full flex gap-2 md:gap-4 px-2 md:px-4">
+                    <motion.button
+                      whileHover={{ scale: 1.05, backgroundColor: "#2D2D2D" }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 bg-sage text-white py-2 md:py-3 rounded-xl text-[8px] md:text-xs uppercase tracking-widest font-bold transition-colors"
+                    >Yes</motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05, backgroundColor: "rgba(90, 99, 68, 0.1)" }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 border border-sage text-sage py-2 md:py-3 rounded-xl text-[8px] md:text-xs uppercase tracking-widest font-bold transition-colors"
+                    >No</motion.button>
+                  </div>
+                </>
+              }
+            />
+          </motion.div>
+
+          {/* FAQ Flip Card (Celestial style) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.4 }}
+            className="w-full h-full col-span-1 flex items-center justify-center"
+          >
+            <FlipCard
+              containerClassName="w-full h-[220px] md:h-[350px] lg:h-[350px] flex items-center justify-center"
+              rounded="rounded-full"
+              className="w-36 h-36 md:w-56 md:h-56 shadow-2xl"
+              front={
+                <div className="w-full h-full relative group flex flex-col items-center justify-center bg-sage border-4 border-white/20 overflow-hidden">
+                  {/* Moving Gradient Sphere Inside */}
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.6, 0.3]
+                    }}
+                    transition={{ repeat: Infinity, duration: 5 }}
+                    className="absolute w-full h-full bg-gradient-to-tr from-[#D4AF37]/40 via-transparent to-white/20 blur-xl"
+                  />
+
+                  <div className="relative z-10 text-white space-y-2">
+                    <p className="serif italic text-[8px] md:text-sm opacity-80 mb-1">Curious?</p>
+                    <h3 className="serif text-xl md:text-5xl tracking-widest uppercase font-light">FAQS</h3>
+                    <motion.div
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 3 }}
+                      className="mx-auto flex justify-center pt-2 md:pt-4"
+                    >
+                      <HelpCircle size={32} />
+                    </motion.div>
+                  </div>
+
+                  {/* Floating Rings Effect */}
+                  <div className="absolute inset-4 rounded-full border border-white/10 group-hover:border-white/30 transition-colors" />
+                </div>
+              }
+              back={
+                <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-paper">
+                  <HelpCircle size={28} className="text-sage mb-2 opacity-70" />
+                  <p className="text-[10px] text-zinc-600 uppercase tracking-widest font-bold mb-2">Parking?</p>
+                  <p className="serif text-xs italic mb-4">Yes, free parking available.</p>
+                  <p className="text-[10px] text-zinc-600 uppercase tracking-widest font-bold mb-2">Indoors?</p>
+                  <p className="serif text-xs italic">Partial outdoors.</p>
+                </div>
+              }
+            />
+          </motion.div>
 
           {/* Venue Flip Card */}
-          <FlipCard
-            containerClassName="w-full col-span-2 lg:col-span-2 h-[220px] md:h-[350px] lg:h-[350px]"
-            initial={{ opacity: 0, x: -30 }}
-            animate={isOpened ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-            transition={{ duration: 1, delay: 1.4 }}
-            front={
-              <div className="w-full h-full relative group min-h-[350px]">
-                <img
-                  src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80&w=800"
-                  alt="Venue"
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:via-black/40 transition-all duration-500" />
-                <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:right-10 text-white space-y-1 md:space-y-2 z-10">
-                  <p className="serif text-[8px] md:text-xs uppercase tracking-[0.4em] opacity-70">A Celebration of Love</p>
-                  <p className="serif text-2xl md:text-5xl leading-tight drop-shadow-lg">Aaron & Denice</p>
-                  <div className="w-10 md:w-16 h-px bg-white/30 pt-2 md:pt-4" />
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="w-full h-full col-span-2 lg:col-span-2"
+          >
+            <FlipCard
+              containerClassName="w-full h-[300px] md:h-[350px] lg:h-[350px]"
+              front={
+                <div className="w-full h-full relative group">
+                  <img
+                    src="https://paradiseweddings.com/img1/containers/img/resorts/villa-premiere-boutique-hotel/jetty-wedding-setup-villa-premiere-boutique-hotel.jpg/39f8e4ff77ee4382feefc6e8be057e8a.webp"
+                    alt="Venue"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
+                  {/* Advanced Frosted Glass Overlay */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
+                  <div className="absolute top-6 right-6 md:top-10 md:right-10 bg-white/60 backdrop-blur-md p-4 md:p-8 border border-white/60 rounded-2xl group-hover:bg-white/80 transition-all duration-700 shadow-xl">
+                    <p className="serif text-[8px] md:text-xs uppercase tracking-[0.4em] text-sage/80 mb-2 flex items-center gap-2">
+                      <span className="w-4 h-px bg-sage/30" />
+                      The Location
+                    </p>
+                    <h3 className="serif text-2xl md:text-5xl text-sage leading-tight drop-shadow-sm font-medium">Jardin de<br />Josefina</h3>
+                  </div>
+
+                  <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 text-sage flex items-center gap-3 bg-white/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/60 shadow-lg">
+                    <MapPin className="text-sage animate-bounce" size={16} />
+                    <p className="serif text-[10px] md:text-sm tracking-[0.2em] font-bold uppercase">Laguna, PH</p>
+                  </div>
                 </div>
-              </div>
-            }
-            back={
-              <>
-                <MapPin size={24} className="text-sage mb-4 md:mb-6 opacity-70 md:w-9 md:h-9" />
-                <h4 className="serif text-2xl md:text-4xl text-sage mb-2 md:mb-4">Jardin de Josefina</h4>
-                <p className="text-[10px] md:text-sm text-zinc-500 uppercase tracking-widest leading-loose mb-4 md:mb-6">
-                  San Pablo City, Laguna<br />Philippines
-                </p>
-                <button className="px-6 py-2 md:px-8 md:py-3 bg-sage text-white rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors">View Map</button>
-              </>
-            }
-          />
+              }
+              back={
+                <>
+                  <MapPin size={24} className="text-sage mb-4 md:mb-6 opacity-70 md:w-9 md:h-9" />
+                  <h4 className="serif text-2xl md:text-4xl text-sage mb-2 md:mb-4">Jardin de Josefina</h4>
+                  <p className="text-[10px] md:text-sm text-zinc-500 uppercase tracking-widest leading-loose mb-4 md:mb-6">
+                    San Pablo City, Laguna<br />Philippines
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-2 md:px-8 md:py-3 bg-sage text-white rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors"
+                  >View Map</motion.button>
+                </>
+              }
+            />
+          </motion.div>
 
           {/* Couple Image / Timeline Flip Card */}
-          <FlipCard
-            containerClassName="w-full col-span-2 lg:col-span-2 h-[220px] md:h-[350px] lg:h-[350px]"
-            initial={{ opacity: 0, x: 30 }}
-            animate={isOpened ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            front={
-              <div className="w-full h-full relative group">
-                <img
-                  src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800"
-                  alt="Couple"
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700 z-10" />
-                <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <p className="serif text-white text-xl md:text-3xl italic tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0 drop-shadow-md">
-                    Event Timeline
-                  </p>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="w-full h-full col-span-2 lg:col-span-2"
+          >
+            <FlipCard
+              containerClassName="w-full h-[300px] md:h-[350px] lg:h-[350px]"
+              front={
+                <div className="w-full h-full relative group overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800"
+                    alt="Couple"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    referrerPolicy="no-referrer"
+                  />
+                  {/* Dynamic Film Strip Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-20">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileHover={{ scale: 1, opacity: 1 }}
+                      className="bg-white/10 backdrop-blur-lg p-6 rounded-full border border-white/20"
+                    >
+                      <Clock size={32} className="text-white" />
+                    </motion.div>
+                    <p className="serif text-white text-3xl md:text-5xl italic tracking-widest mt-6 drop-shadow-lg">
+                      Event Timeline
+                    </p>
+                    <div className="mt-4 flex gap-2">
+                      {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/50" />)}
+                    </div>
+                  </div>
+
+                  {/* Decorative Side Lines */}
+                  <div className="absolute top-0 bottom-0 left-4 w-px bg-white/20" />
+                  <div className="absolute top-0 bottom-0 left-6 w-px bg-white/10" />
+                  <div className="absolute top-0 bottom-0 right-4 w-px bg-white/20" />
+                  <div className="absolute top-0 bottom-0 right-6 w-px bg-white/10" />
                 </div>
-              </div>
-            }
-            back={
-              <div className="w-full h-full flex flex-col justify-center items-center px-4 md:px-8">
-                <Clock size={24} className="text-sage mb-4 md:mb-6 opacity-70 md:w-8 md:h-8" />
-                <h4 className="serif text-2xl md:text-3xl text-sage mb-4 md:mb-8">Timeline</h4>
+              }
+              back={
+                <div className="w-full h-full flex flex-col justify-center items-center px-4 md:px-8">
+                  <Clock size={24} className="text-sage mb-4 md:mb-6 opacity-70 md:w-8 md:h-8" />
+                  <h4 className="serif text-2xl md:text-3xl text-sage mb-4 md:mb-8">Timeline</h4>
 
-                <div className="w-full max-w-sm space-y-4 md:space-y-6 text-left">
-                  <div className="flex items-start gap-2 md:gap-4">
-                    <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">3:00 PM</span>
-                    <div className="w-px h-full bg-sage/30 relative mt-2 -ml-[1px] md:-ml-2 shrink-0">
-                      <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
+                  <div className="w-full max-w-sm space-y-4 md:space-y-6 text-left">
+                    <div className="flex items-start gap-2 md:gap-4">
+                      <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">3:00 PM</span>
+                      <div className="w-px h-full bg-sage/30 relative mt-2 -ml-[1px] md:-ml-2 shrink-0">
+                        <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Ceremony</p>
+                        <p className="serif text-[10px] md:text-xs italic text-zinc-500">Exchange of Vows</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Ceremony</p>
-                      <p className="serif text-[10px] md:text-xs italic text-zinc-500">Exchange of Vows</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start gap-2 md:gap-4">
-                    <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">4:30 PM</span>
-                    <div className="w-px h-12 md:h-16 bg-sage/30 relative -ml-[1px] md:-ml-2 shrink-0">
-                      <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
+                    <div className="flex items-start gap-2 md:gap-4">
+                      <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">4:30 PM</span>
+                      <div className="w-px h-12 md:h-16 bg-sage/30 relative -ml-[1px] md:-ml-2 shrink-0">
+                        <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
+                      </div>
+                      <div className="-mt-1">
+                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Cocktails</p>
+                        <p className="serif text-[10px] md:text-xs italic text-zinc-500">Drinks & Photos</p>
+                      </div>
                     </div>
-                    <div className="-mt-1">
-                      <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Cocktails</p>
-                      <p className="serif text-[10px] md:text-xs italic text-zinc-500">Drinks & Photos</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start gap-2 md:gap-4">
-                    <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">6:00 PM</span>
-                    <div className="w-px h-full bg-transparent relative mt-2 -ml-[1px] md:-ml-2 shrink-0">
-                      <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Reception</p>
-                      <p className="serif text-[10px] md:text-xs italic text-zinc-500">Dinner & Dancing</p>
+                    <div className="flex items-start gap-2 md:gap-4">
+                      <span className="serif text-sage font-bold text-[10px] md:text-base w-12 md:w-20 text-right shrink-0 pt-1">6:00 PM</span>
+                      <div className="w-px h-full bg-transparent relative mt-2 -ml-[1px] md:-ml-2 shrink-0">
+                        <div className="absolute top-0 -left-[3px] w-2 h-2 rounded-full bg-sage" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Reception</p>
+                        <p className="serif text-[10px] md:text-xs italic text-zinc-500">Dinner & Dancing</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            }
-          />
+              }
+            />
+          </motion.div>
 
         </div>
+
+        {/* Our Love Story Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-16 md:mt-32 space-y-12 md:space-y-20 p-8 md:p-16 bg-white/40 backdrop-blur-md rounded-[3rem] border border-white shadow-xl relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-sage/20 to-transparent" />
+
+          <div className="text-center space-y-4">
+            <Heart className="text-sage/40 w-8 h-8 mx-auto" fill="currentColor" />
+            <h2 className="serif text-4xl md:text-7xl text-sage font-light italic">Our Story</h2>
+            <p className="text-xs uppercase tracking-[0.4em] text-zinc-400 font-bold">The Journey of Us</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
+            {[
+              { year: "2020", title: "First Met", desc: "A chance encounter that changed everything.", icon: <Heart className="w-5 h-5" /> },
+              { year: "2022", title: "The Proposal", desc: "Underneath the stars, she said yes!", icon: <Heart className="w-5 h-5" /> },
+              { year: "2025", title: "The Big Day", desc: "Beginning our forever, together.", icon: <Heart className="w-5 h-5" /> }
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.2 }}
+                className="text-center space-y-4 relative group"
+              >
+                <div className="w-12 h-12 rounded-full bg-sage/10 text-sage mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                  {item.icon}
+                </div>
+                <div className="space-y-2">
+                  <span className="serif text-2xl text-sage/60 italic">{item.year}</span>
+                  <h4 className="serif text-2xl text-zinc-800 font-medium tracking-wide">{item.title}</h4>
+                  <p className="serif text-sm italic text-zinc-500 leading-relaxed max-w-[200px] mx-auto">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-sage/5 rounded-full blur-3xl -mb-32 -mr-32" />
+        </motion.div>
 
         {/* Footer Info */}
         <motion.footer
@@ -595,26 +993,73 @@ export default function App() {
 
       </motion.main>
 
-      {/* Decorative Floating Elements */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1] overflow-hidden opacity-40">
+      {/* Decorative Floating Elements & Overlays */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[1] overflow-hidden">
+        {/* Animated Light Rays */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(164,178,165,0.1)_0%,transparent_70%)]" />
+
+        {/* Organic Floating Blobs */}
         <motion.div
           animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-            rotate: [0, 10, 0]
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+            rotate: [0, 45, 0],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-[10%] -left-[10%] w-[60rem] h-[60rem] bg-sage/5 rounded-full blur-[140px]"
+        />
+        <motion.div
+          animate={{
+            x: [0, -80, 0],
+            y: [0, 100, 0],
+            rotate: [0, -30, 0],
+            scale: [1, 1.1, 1]
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-5%] left-[-5%] w-[40rem] h-[40rem] bg-sage/10 rounded-full blur-[120px]"
+          className="absolute -bottom-[15%] -right-[15%] w-[70rem] h-[70rem] bg-sage/10 rounded-full blur-[160px]"
         />
-        <motion.div
-          animate={{
-            x: [0, -40, 0],
-            y: [0, 50, 0],
-            rotate: [0, -15, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-10%] right-[-10%] w-[50rem] h-[50rem] bg-sage/5 rounded-full blur-[150px]"
-        />
+
+        {/* Falling Petals & Hearts Layer */}
+        {[...Array(30)].map((_, i) => {
+          const isHeart = i % 2 === 0;
+          const randomDelay = Math.random() * 20;
+          const randomDuration = 15 + Math.random() * 20;
+          const size = isHeart ? Math.random() * 15 + 10 : Math.random() * 24 + 16;
+
+          return (
+            <motion.div
+              key={`falling-decor-${i}`}
+              className="absolute pointer-events-none blur-[1px] md:blur-none"
+              initial={{
+                top: "-10%",
+                left: `${Math.random() * 100}%`,
+                rotate: 0,
+                scale: 0.5,
+                opacity: 0
+              }}
+              animate={{
+                top: "110%",
+                left: [`${Math.random() * 100}%`, `${Math.random() * 100 + (Math.random() - 0.5) * 20}%`, `${Math.random() * 100}%`],
+                rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
+                scale: [0.5, 1, 0.8],
+                opacity: [0, 0.4, 0]
+              }}
+              transition={{
+                duration: randomDuration,
+                repeat: Infinity,
+                delay: randomDelay,
+                ease: "linear"
+              }}
+            >
+              {isHeart ? (
+                <Heart className="text-sage" fill="currentColor" size={size} />
+              ) : (
+                <RealisticPetal size={size} />
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
