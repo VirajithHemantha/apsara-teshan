@@ -143,7 +143,7 @@ export default function App() {
             className="text-xs sm:text-sm text-gray-500 font-serif mb-8 uppercase tracking-widest leading-relaxed"
           >
             Loving Son of Father Mr. Hemantha & Mrs. Dammika <br className="hidden sm:block" />
-            Together with Loving Daughter of Mr. R. Prasanna & Mrs. Nirupa
+            Together with Loving Daughter of Mr. Prasanna & Mrs. Nirupa
           </motion.div>
 
           {/* Names */}
@@ -387,26 +387,52 @@ export default function App() {
             viewport={{ once: true }}
             className="bg-gradient-to-br from-white to-slate-50 rounded-2xl overflow-hidden shadow-xl border-2 border-[#D4AF37]/30"
           >
-            <div className="aspect-video relative">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.083756816538!2d80.0528653!3d7.1162446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2fd0df7a7003%3A0x320b2e4d32d3838d!2sMagalegoda%2C%20Veyangoda!5e0!3m2!1sen!2sus!4v1234567890"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0"
+            {/* Decorative Map Visual */}
+            <div className="relative bg-gradient-to-br from-[#f0f7f1] via-[#e8f4ea] to-[#ddeee0] py-16 flex flex-col items-center justify-center gap-4 border-b border-[#D4AF37]/20">
+              {/* Grid lines for map feel */}
+              <div className="absolute inset-0 opacity-10"
+                style={{
+                  backgroundImage: 'linear-gradient(#90b996 1px, transparent 1px), linear-gradient(90deg, #90b996 1px, transparent 1px)',
+                  backgroundSize: '40px 40px'
+                }}
               />
-
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none">
+              {/* Ripple rings */}
+              <div className="relative flex items-center justify-center">
                 <motion.div
-                  animate={{ y: [0, -10, 0] }}
+                  animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0, 0.4] }}
+                  transition={{ duration: 2.5, repeat: Infinity }}
+                  className="absolute w-24 h-24 rounded-full bg-[#D4AF37]/30"
+                />
+                <motion.div
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
+                  className="absolute w-16 h-16 rounded-full bg-[#D4AF37]/40"
+                />
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
+                  className="relative z-10"
                 >
-                  <MapPin className="w-12 h-12 text-[#D4AF37] drop-shadow-lg" fill="#D4AF37" />
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8941F] flex items-center justify-center shadow-xl">
+                    <MapPin className="w-7 h-7 text-white" fill="white" />
+                  </div>
                 </motion.div>
               </div>
+              <p className="relative z-10 text-[#183d72] font-serif text-lg font-semibold tracking-widest uppercase mt-2">
+                Seven Say Banquet Hall
+              </p>
+              <p className="relative z-10 text-gray-500 text-sm uppercase tracking-widest">
+                Magalegoda, Veyangoda
+              </p>
+              <a
+                href="https://maps.app.goo.gl/NGvq8VkyoAUX5iiV8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 mt-2 inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8941F] text-white font-serif text-sm tracking-widest uppercase shadow-lg hover:scale-105 transition-transform"
+              >
+                <MapPin className="w-4 h-4" />
+                Open in Google Maps
+              </a>
             </div>
 
             <div className="p-8 text-center font-serif">
@@ -416,7 +442,7 @@ export default function App() {
               <p className="text-gray-600 mb-4 uppercase tracking-widest text-sm">
                 Magalegoda, Veyangoda
               </p>
-              <div className="flex flex-wrap justify-center gap-6 text-sm">
+              <div className="flex flex-wrap justify-center gap-6 text-sm mb-6">
                 <div className="flex items-center gap-2 text-gray-600">
                   <Phone className="w-4 h-4 text-[#D4AF37]" />
                   <span>Dinuka: 0757534033</span>
@@ -426,6 +452,15 @@ export default function App() {
                   <span>Prasanna: 0772693907</span>
                 </div>
               </div>
+              <a
+                href="https://maps.app.goo.gl/NGvq8VkyoAUX5iiV8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8941F] text-white font-serif text-sm tracking-widest uppercase shadow-lg hover:scale-105 transition-transform"
+              >
+                <MapPin className="w-4 h-4" />
+                Get Directions
+              </a>
             </div>
           </motion.div>
         </div>

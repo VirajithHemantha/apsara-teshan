@@ -1034,16 +1034,16 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
               ))}
 
               <div className="flower-cluster">
-                <img 
-                  src="/dried-flowers.png" 
-                  alt="Dried botanical flowers" 
+                <img
+                  src="/dried-flowers.png"
+                  alt="Dried botanical flowers"
                   className="real-flowers-img"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.setAttribute('style', 'display:block; position:relative; width:100%; height:100%; transform: translateY(-70px) rotate(15deg);');
                   }}
                 />
-                
+
                 {/* Fallback real-looking stems structure if image is missing */}
                 <div className="flower-bundle-fallback" style={{ display: 'none' }}>
                   {/* Long stems coming out the top */}
@@ -1151,7 +1151,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
                 <div className="sleeve-shine" />
                 <div className="sleeve-edge" />
                 <div className="sleeve-content">
-                  <div className="sleeve-names">Dinuka & Supuni</div>
+                  <div className="sleeve-names">D & S</div>
                   <div className="sleeve-tagline">Our Wedding Day</div>
                 </div>
               </div>
