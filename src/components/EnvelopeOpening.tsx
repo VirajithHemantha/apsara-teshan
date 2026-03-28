@@ -812,7 +812,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           height: 1.5px;
           background: linear-gradient(
             90deg,
-            #a67c00, #d4af37, #f3e5ab, #d4af37, #8a5a19
+            #7e8794, #b8c0cb, #eef2f7, #b8c0cb, #6d7785
           );
           z-index: 5;
           box-shadow: 0 1px 2px rgba(0,0,0,0.4);
