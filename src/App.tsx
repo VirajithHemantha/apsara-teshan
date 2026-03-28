@@ -30,9 +30,10 @@ export default function App() {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   useEffect(() => {
-    audioRef.current = new Audio();
+    audioRef.current = new Audio('/paulyudin-wedding-485932.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.3;
+    audioRef.current.preload = 'auto';
 
     return () => {
       if (audioRef.current) {

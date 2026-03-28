@@ -1174,7 +1174,6 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
                 <div className="card-frame">
                   <img src="/111.png" alt="" className="card-corner-image top-left" aria-hidden="true" />
                   <img src="/111.png" alt="" className="card-corner-image bottom-right" aria-hidden="true" />
-                  <div className="card-monogram">D&S</div>
                   <div className="card-kicker">Promise Of Love</div>
                   <h2 className="card-title">Dinuka & Supuni</h2>
 
