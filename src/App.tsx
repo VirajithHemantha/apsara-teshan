@@ -142,7 +142,7 @@ export default function App() {
             transition={{ delay: 0.8 }}
             className="text-xs sm:text-sm text-gray-500 font-serif mb-8 uppercase tracking-widest leading-relaxed"
           >
-            Loving Son of Father Mr. Hemantha & Mrs. Dammika <br className="hidden sm:block" />
+            Loving Son of Mr. Hemantha & Mrs. Dammika <br className="hidden sm:block" />
             Together with Loving Daughter of Mr. Prasanna & Mrs. Nirupa
           </motion.div>
 

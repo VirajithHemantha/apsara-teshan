@@ -414,7 +414,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           height: 100%;
           border-radius: 10px;
           background:
-            linear-gradient(180deg, #5c2975 0%, #3e1b52 100%);
+            linear-gradient(180deg, #f8effc 0%, #ecdcf5 100%);
           box-shadow:
             0 24px 60px rgba(65, 48, 34, 0.16),
             inset 0 1px 0 rgba(255,255,255,0.95);
@@ -432,7 +432,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           width: 100%;
           height: 100%;
           border-radius: 6px;
-          border: 1px solid rgba(196, 180, 165, 0.34);
+          border: 2px solid rgba(104, 71, 154, 0.55);
           position: relative;
           padding: 42px 26px 34px;
           display: flex;
@@ -441,16 +441,52 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           text-align: center;
           overflow: hidden;
           background:
-            radial-gradient(circle at top, rgba(255,255,255,0.15), rgba(0,0,0,0.25));
+            radial-gradient(circle at top, rgba(255,255,255,0.68), rgba(255,255,255,0.16));
         }
 
         .card-frame::before {
           content: "";
           position: absolute;
-          inset: 12px;
-          border: 1px solid rgba(215, 201, 188, 0.28);
+          inset: 10px;
+          border: 1px solid rgba(104, 71, 154, 0.48);
           border-radius: 4px;
           pointer-events: none;
+        }
+
+        .card-frame::after {
+          content: "";
+          position: absolute;
+          inset: 20px;
+          border: 1px solid rgba(104, 71, 154, 0.2);
+          border-radius: 2px;
+          pointer-events: none;
+        }
+
+        .card-frame > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .card-corner-image {
+          position: absolute;
+          width: 86px;
+          height: 86px;
+          object-fit: contain;
+          pointer-events: none;
+          z-index: 0;
+          opacity: 0.95;
+          filter: drop-shadow(0 2px 3px rgba(92, 41, 117, 0.2));
+        }
+
+        .card-corner-image.top-left {
+          top: 6px;
+          left: 6px;
+        }
+
+        .card-corner-image.bottom-right {
+          right: 6px;
+          bottom: 6px;
+          transform: rotate(180deg);
         }
 
         .card-monogram {
@@ -459,11 +495,11 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           border-radius: 999px;
           display: grid;
           place-items: center;
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          color: #5c2975;
+          border: 1px solid rgba(92, 41, 117, 0.15);
           background:
-            radial-gradient(circle at top left, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
-          box-shadow: 0 16px 34px rgba(0, 0, 0, 0.15);
+            radial-gradient(circle at top left, rgba(255,255,255,0.8), rgba(255,255,255,0.3));
+          box-shadow: 0 16px 34px rgba(92, 41, 117, 0.08);
           font-size: 34px;
           font-family: "Great Vibes", cursive;
           margin-bottom: 20px;
@@ -474,7 +510,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           font-size: 11px;
           letter-spacing: 0.26em;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.9);
+          color: rgba(92, 41, 117, 0.9);
           margin-bottom: 14px;
         }
 
@@ -482,7 +518,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           font-family: "Great Vibes", cursive;
           font-size: 58px;
           line-height: 1;
-          color: #ffffff;
+          color: #4a2060;
           margin: 0;
         }
 
@@ -490,20 +526,20 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           margin: 16px 0 26px;
           font-size: 18px;
           line-height: 1.7;
-          color: rgba(255, 255, 255, 0.85);
+          color: rgba(92, 41, 117, 0.85);
           max-width: 280px;
         }
 
         .card-divider {
           width: 90px;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+          background: linear-gradient(90deg, transparent, rgba(92,41,117,0.3), transparent);
           margin-bottom: 24px;
         }
 
         .card-date {
           font-size: 18px;
-          color: rgba(255, 255, 255, 0.9);
+          color: rgba(92, 41, 117, 0.9);
           margin-bottom: 10px;
           font-style: italic;
         }
@@ -511,14 +547,14 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
         .card-day {
           font-size: 30px;
           letter-spacing: 0.08em;
-          color: #ffffff;
+          color: #4a2060;
           font-weight: 600;
           margin-bottom: 10px;
         }
 
         .card-time {
           font-size: 18px;
-          color: rgba(255, 255, 255, 0.85);
+          color: rgba(92, 41, 117, 0.85);
           margin-bottom: 18px;
         }
 
@@ -528,7 +564,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           line-height: 1.9;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.9);
+          color: rgba(92, 41, 117, 0.9);
         }
 
         .bottom-floral-line {
@@ -955,6 +991,29 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
             padding: 28px 16px 24px;
           }
 
+          .card-frame::before {
+            inset: 8px;
+          }
+
+          .card-frame::after {
+            inset: 14px;
+          }
+
+          .card-corner-image {
+            width: 62px;
+            height: 62px;
+          }
+
+          .card-corner-image.top-left {
+            top: 6px;
+            left: 6px;
+          }
+
+          .card-corner-image.bottom-right {
+            right: 6px;
+            bottom: 6px;
+          }
+
           .card-title {
             font-size: 42px;
           }
@@ -1073,6 +1132,8 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
 
               <div className="invitation-card">
                 <div className="card-frame">
+                  <img src="/111.png" alt="" className="card-corner-image top-left" aria-hidden="true" />
+                  <img src="/111.png" alt="" className="card-corner-image bottom-right" aria-hidden="true" />
                   <div className="card-monogram">D&S</div>
                   <div className="card-kicker">Promise Of Love</div>
                   <h2 className="card-title">Dinuka & Supuni</h2>
@@ -1160,7 +1221,6 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
                 <div className="sleeve-shine" />
                 <div className="sleeve-edge" />
                 <div className="sleeve-content">
-                  <div className="sleeve-names">Our Wedding Day</div>
                 </div>
               </div>
 
@@ -1169,6 +1229,21 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
                 onClick={() => setOpened(true)}
                 aria-label="Open invitation"
               >
+                <img
+                  src="/11.png"
+                  alt="Dried flower"
+                  style={{
+                    position: "absolute",
+                    bottom: "60%",
+                    left: "50%",
+                    transform: "translateX(-50%) rotate(15deg)",
+                    height: "140px",
+                    objectFit: "contain",
+                    pointerEvents: "none",
+                    filter: "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))",
+                    zIndex: -1
+                  }}
+                />
                 <div className="seal-inner">
                   <div className="seal-letters">DS</div>
                 </div>
