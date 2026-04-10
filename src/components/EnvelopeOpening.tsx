@@ -26,7 +26,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           width: 100%;
           min-height: 100%;
           margin: 0;
-          background: #e9e5df;
+          background: #e9e2d8;
         }
 
         .scene {
@@ -36,10 +36,34 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           align-items: center;
           justify-content: center;
           padding: 20px;
-          background: radial-gradient(circle at center, #f2eadf 0%, #dcd1c4 100%);
+          background: radial-gradient(ellipse at 30% 20%, #f5ebe0 0%, #e8ddd3 40%, #d4c4b0 100%);
           perspective: 1500px;
           overflow: hidden;
           font-family: "Cormorant Garamond", serif;
+        }
+
+        /* Ambient floating orbs */
+        .scene::before,
+        .scene::after {
+          content: '';
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          filter: blur(80px);
+        }
+        .scene::before {
+          width: 400px;
+          height: 400px;
+          top: -100px;
+          right: -100px;
+          background: radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%);
+        }
+        .scene::after {
+          width: 300px;
+          height: 300px;
+          bottom: -80px;
+          left: -80px;
+          background: radial-gradient(circle, rgba(176,137,104,0.12) 0%, transparent 70%);
         }
 
         .envelope-container {
@@ -59,9 +83,9 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
         .envelope-base {
           position: absolute;
           inset: 0;
-          background: #f4f0ea;
-          border-radius: 4px;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+          background: linear-gradient(145deg, #f5ebe0, #ede3d6);
+          border-radius: 6px;
+          box-shadow: 0 30px 60px -15px rgba(139,111,71,0.3), 0 0 0 1px rgba(201,169,110,0.1);
           z-index: 1;
         }
 
@@ -69,81 +93,93 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
         .card-container {
           position: absolute;
           inset: 0;
-          background: #fffcf8;
-          border-radius: 4px;
+          background: linear-gradient(180deg, #fffdf9 0%, #faf6f1 50%, #f8f2ea 100%);
+          border-radius: 6px;
           z-index: 2;
           overflow: hidden;
-          box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+          box-shadow: inset 0 0 30px rgba(201,169,110,0.05);
           transform: scale(1);
           transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .envelope-container.is-open .card-container {
-          transform: scale(1.03); /* slight popup effect when opened */
-          z-index: 4; /* Card rises above flap once opened */
+          transform: scale(1.03);
+          z-index: 4;
         }
 
-        /* Elegant Thin Gold Border inside Card */
+        /* Elegant Gold Double Border */
         .card-border {
           position: absolute;
-          inset: 16px;
-          border: 1px solid rgba(212, 175, 55, 0.6);
+          inset: 18px;
+          border: 1.5px solid rgba(201,169,110,0.5);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 30px 20px;
+          padding: 40px 24px;
           text-align: center;
         }
 
-        /* Inner corner frame (optional detailing) */
         .card-border::before {
           content: '';
           position: absolute;
-          inset: 6px;
-          border: 1px solid rgba(212, 175, 55, 0.15);
+          inset: 7px;
+          border: 0.5px solid rgba(201,169,110,0.2);
         }
 
-        /* Floral Graphics */
-        .floral-branch {
+        /* Corner Ornaments */
+        .corner-ornament {
           position: absolute;
-          width: 220px;
-          height: auto;
-          opacity: 0.85;
+          width: 60px;
+          height: 60px;
           pointer-events: none;
+          z-index: 3;
         }
-        
-        .floral-top-right {
-          top: -15px;
-          right: -15px;
-          transform: rotate(15deg);
-        }
+        .corner-tl { top: 10px; left: 10px; }
+        .corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
+        .corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
+        .corner-br { bottom: 10px; right: 10px; transform: scale(-1, -1); }
 
-        .floral-bottom-left {
-          bottom: -20px;
-          left: -20px;
-          transform: rotate(195deg);
-          width: 260px;
+        /* Decorative Divider */
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 16px 0;
+          z-index: 2;
+        }
+        .divider-line {
+          width: 50px;
+          height: 0.5px;
+          background: linear-gradient(90deg, transparent, #c9a96e, transparent);
+        }
+        .divider-diamond {
+          width: 6px;
+          height: 6px;
+          background: #c9a96e;
+          transform: rotate(45deg);
+          opacity: 0.7;
         }
 
         /* Typography */
         .text-eyebrow {
-          font-family: 'Times New Roman', serif;
-          font-size: 11px;
-          letter-spacing: 0.35em;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 10px;
+          letter-spacing: 0.45em;
           text-transform: uppercase;
-          color: #5a5c51;
-          margin-bottom: 24px;
+          color: #b08968;
+          margin-bottom: 20px;
           margin-top: auto;
           z-index: 2;
+          font-weight: 400;
         }
 
         .text-names {
           font-family: "Great Vibes", cursive;
-          font-size: 64px;
-          line-height: 1;
-          color: #1a1a1a;
-          margin: 0 0 30px 0;
+          font-size: 60px;
+          line-height: 1.1;
+          color: #3d2e1f;
+          margin: 0 0 10px 0;
           font-weight: 400;
           z-index: 2;
           display: flex;
@@ -153,29 +189,43 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
         
         .text-ampersand {
           font-family: "Great Vibes", cursive;
-          font-size: 45px;
+          font-size: 40px;
           display: block;
-          margin: -5px 0;
-          color: #d4af37;
+          margin: -2px 0;
+          color: #c9a96e;
+          text-shadow: 0 1px 2px rgba(201,169,110,0.3);
         }
 
         .text-details {
-          font-family: 'Times New Roman', serif;
-          font-size: 11px;
-          letter-spacing: 0.25em;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 9.5px;
+          letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: #3b3d36;
-          line-height: 2;
+          color: #6b5b4e;
+          line-height: 2.2;
           margin-bottom: auto;
           z-index: 2;
+          font-weight: 300;
         }
 
         .text-date {
           display: block;
-          margin: 14px 0;
-          font-size: 13px;
+          margin: 12px 0;
+          font-size: 11px;
           font-weight: 500;
-          letter-spacing: 0.3em;
+          letter-spacing: 0.28em;
+          color: #b08968;
+        }
+
+        .text-church {
+          font-family: "Cormorant Garamond", serif;
+          font-size: 14px;
+          font-style: italic;
+          font-weight: 400;
+          letter-spacing: 0.1em;
+          color: #8b6f47;
+          margin-top: 4px;
+          text-transform: none;
         }
 
         /* Envelope Fold (Left Flap) */
@@ -185,10 +235,10 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           left: 0;
           width: 66%;
           height: 100%;
-          background: #f1ebd8;
+          background: linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 50%, #f2ead8 100%);
           background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
-          border-right: 1px solid rgba(0,0,0,0.08);
-          box-shadow: 10px 0 25px -10px rgba(0,0,0,0.3);
+          border-right: 1px solid rgba(201,169,110,0.15);
+          box-shadow: 10px 0 30px -10px rgba(139,111,71,0.25);
           transform-origin: left center;
           transform: rotateY(0deg);
           transition: transform 1.5s cubic-bezier(0.25, 1, 0.3, 1), box-shadow 1.5s ease;
@@ -197,7 +247,6 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           border-bottom-right-radius: 2px;
         }
 
-        /* Add inner shadow to flap to give thickness */
         .flap-left::after {
           content: '';
           position: absolute;
@@ -244,8 +293,8 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
         /* Bow Container */
         .bow-center {
           position: absolute;
-          top: 27px; /* center of ribbon band */
-          left: 55%; /* Offset to sit nicely on the flap edge */
+          top: 27px;
+          left: 55%;
           transform: translate(-50%, -50%);
           width: 160px;
           height: 100px;
@@ -266,18 +315,28 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           bottom: -60px;
           left: 50%;
           transform: translateX(-50%);
-          color: #72685c;
+          color: #b08968;
           font-family: "Montserrat", sans-serif;
-          font-size: 11px;
-          letter-spacing: 0.25em;
+          font-size: 10px;
+          letter-spacing: 0.35em;
           text-transform: uppercase;
           opacity: 1;
           transition: opacity 0.5s;
           white-space: nowrap;
+          font-weight: 400;
         }
 
         .envelope-container.is-open .instruction-toast {
           opacity: 0;
+        }
+
+        /* Shimmer animation for gold accents */
+        @keyframes shimmer {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.8; }
+        }
+        .shimmer {
+          animation: shimmer 3s ease-in-out infinite;
         }
 
         @media (max-width: 600px) {
@@ -286,16 +345,17 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
             height: 520px;
           }
           .text-names {
-            font-size: 50px;
+            font-size: 46px;
           }
           .text-ampersand {
-            font-size: 36px;
+            font-size: 32px;
           }
-          .floral-branch {
-            width: 160px;
+          .corner-ornament {
+            width: 45px;
+            height: 45px;
           }
-          .floral-bottom-left {
-            width: 190px;
+          .card-border {
+            padding: 30px 16px;
           }
           .bow-center {
             width: 140px;
@@ -317,35 +377,43 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           {/* Inner Card */}
           <div className="card-container">
             <div className="card-border">
-              {/* Floral Ornaments (SVG) */}
-              <svg className="floral-branch floral-top-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <g fill="#A6B3A0" opacity="0.8">
-                  <path d="M100,50 Q130,20 180,30 Q160,60 130,70 Q110,80 100,50 Z" />
-                  <path d="M120,60 Q150,50 170,80 Q140,110 110,90 Q100,70 120,60 Z" />
-                  <path d="M110,80 Q120,110 90,140 Q60,120 70,100 Q90,80 110,80 Z" />
-                  <circle cx="150" cy="50" r="4" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                  <circle cx="140" cy="70" r="5" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                  <circle cx="110" cy="110" r="3" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                </g>
-                <path d="M200,0 Q120,40 50,150" stroke="#8A9684" strokeWidth="2" fill="none" />
+              {/* 4 Corner Gold Ornaments */}
+              <svg className="corner-ornament corner-tl" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#c9a96e" strokeWidth="0.8" opacity="0.6"/>
+                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#c9a96e" opacity="0.08"/>
+                <circle cx="5" cy="5" r="2" fill="#c9a96e" opacity="0.5"/>
+                <path d="M8,5 Q12,8 5,12" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4"/>
+                <path d="M5,8 Q8,12 12,5" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
               </svg>
-
-              <svg className="floral-branch floral-bottom-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <g fill="#9FB098" opacity="0.85">
-                  <path d="M40,150 Q70,110 130,120 Q110,160 80,170 Q50,180 40,150 Z" />
-                  <path d="M70,130 Q100,100 120,140 Q90,180 60,160 Q40,140 70,130 Z" />
-                  <path d="M90,150 Q110,180 70,200 Q40,180 60,160 Q80,140 90,150 Z" />
-                  <path d="M110,130 Q140,100 160,140 Q130,180 100,160 Q80,140 110,130 Z" />
-                  <path d="M140,110 Q170,80 190,120 Q160,160 130,140 Q110,120 140,110 Z" />
-                  <circle cx="100" cy="140" r="7" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                  <circle cx="80" cy="170" r="5" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                  <circle cx="120" cy="160" r="5" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                  <circle cx="150" cy="130" r="4" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1" />
-                </g>
-                <path d="M0,200 Q80,160 180,60" stroke="#8A9684" strokeWidth="2" fill="none" />
+              <svg className="corner-ornament corner-tr" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#c9a96e" strokeWidth="0.8" opacity="0.6"/>
+                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#c9a96e" opacity="0.08"/>
+                <circle cx="5" cy="5" r="2" fill="#c9a96e" opacity="0.5"/>
+                <path d="M8,5 Q12,8 5,12" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4"/>
+                <path d="M5,8 Q8,12 12,5" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
+              </svg>
+              <svg className="corner-ornament corner-bl" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#c9a96e" strokeWidth="0.8" opacity="0.6"/>
+                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#c9a96e" opacity="0.08"/>
+                <circle cx="5" cy="5" r="2" fill="#c9a96e" opacity="0.5"/>
+                <path d="M8,5 Q12,8 5,12" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4"/>
+                <path d="M5,8 Q8,12 12,5" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
+              </svg>
+              <svg className="corner-ornament corner-br" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#c9a96e" strokeWidth="0.8" opacity="0.6"/>
+                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#c9a96e" opacity="0.08"/>
+                <circle cx="5" cy="5" r="2" fill="#c9a96e" opacity="0.5"/>
+                <path d="M8,5 Q12,8 5,12" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4"/>
+                <path d="M5,8 Q8,12 12,5" stroke="#c9a96e" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
               </svg>
 
               <div className="text-eyebrow">Promise of Love</div>
+
+              <div className="divider">
+                <div className="divider-line" />
+                <div className="divider-diamond" />
+                <div className="divider-line" />
+              </div>
 
               <h1 className="text-names">
                 Samadhi
@@ -353,10 +421,16 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
                 Madhawa
               </h1>
 
+              <div className="divider">
+                <div className="divider-line" />
+                <div className="divider-diamond" />
+                <div className="divider-line" />
+              </div>
+
               <div className="text-details">
                 Request the honour of your presence<br />
                 <span className="text-date">Saturday 19 September 2026 At 3:30 PM</span>
-                St. Antony's Church<br />
+                <span className="text-church">St. Antony's Church</span><br />
                 Kongodamulla, Katana
               </div>
             </div>
