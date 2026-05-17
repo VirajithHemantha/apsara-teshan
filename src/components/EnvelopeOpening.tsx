@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-export function EnvelopeOpening({ onComplete, onMusicStart, event = 'both' }: { onComplete: () => void, onMusicStart?: () => void, event?: string | null }) {
+interface EnvelopeOpeningProps {
+  onComplete: () => void;
+  onMusicStart?: () => void;
+  event?: string | null;
+  readyToTransition?: boolean;
+}
+
+export function EnvelopeOpening({
+  onComplete,
+  onMusicStart,
+  event = 'both',
+  readyToTransition = true,
+}: EnvelopeOpeningProps) {
   const [opened, setOpened] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const completedRef = useRef(false);
 
   useEffect(() => {
-    if (opened) {
-      const timer = setTimeout(() => {
-        onComplete();
-      }, 3500);
-      return () => clearTimeout(timer);
-    }
-  }, [opened, onComplete]);
+    if (!opened || !readyToTransition || completedRef.current) return;
+
+    const timer = window.setTimeout(() => {
+      completedRef.current = true;
+      setExiting(true);
+      window.setTimeout(() => onComplete(), 400);
+    }, 2200);
+
+    return () => window.clearTimeout(timer);
+  }, [opened, readyToTransition, onComplete]);
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap');
-
         * {
           box-sizing: border-box;
         }
@@ -29,8 +44,23 @@ export function EnvelopeOpening({ onComplete, onMusicStart, event = 'both' }: { 
         }
 
         .scene {
+          position: fixed;
+          inset: 0;
+          z-index: 100;
+          min-height: 100vh;
+          min-height: 100dvh;
+          transition: opacity 0.4s ease;
+        }
+
+        .scene.is-exiting {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .scene-inner {
           position: relative;
           min-height: 100vh;
+          min-height: 100dvh;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -235,7 +265,8 @@ export function EnvelopeOpening({ onComplete, onMusicStart, event = 'both' }: { 
           width: 66%;
           height: 100%;
           background: linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 50%, #f2ead8 100%);
-          background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+          background-image: linear-gradient(135deg, rgba(255,255,255,0.08) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.08) 75%, transparent 75%);
+          background-size: 8px 8px;
           border-right: 1px solid rgba(201,169,110,0.15);
           box-shadow: 10px 0 30px -10px rgba(139,111,71,0.25);
           transform-origin: left center;
@@ -363,7 +394,8 @@ export function EnvelopeOpening({ onComplete, onMusicStart, event = 'both' }: { 
         }
       `}</style>
 
-      <div className="scene">
+      <div className={`scene ${exiting ? 'is-exiting' : ''}`}>
+        <div className="scene-inner">
         <div
           className={`envelope-container ${opened ? 'is-open' : ''}`}
           onClick={() => {
@@ -461,6 +493,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart, event = 'both' }: { 
           </div>
 
           <div className="instruction-toast">Click to unwrap</div>
+        </div>
         </div>
       </div>
     </>
