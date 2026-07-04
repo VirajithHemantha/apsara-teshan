@@ -95,21 +95,21 @@ export const Admin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-ivory py-12 px-4 sm:px-6 lg:px-8 font-sans text-stone-800 relative overflow-hidden selection:bg-brand-beige-deep/20">
+    <div className="min-h-screen bg-brand-blush py-12 px-4 sm:px-6 lg:px-8 font-sans text-stone-800 relative overflow-hidden selection:bg-brand-plum/20">
       {/* Background Orbs */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-radial from-brand-beige/20 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-radial from-brand-lavender/20 to-transparent blur-3xl pointer-events-none -z-10" />
 
       <div className="max-w-4xl mx-auto">
         {/* Back to main website button */}
         <div className="mb-8 flex justify-between items-center">
           <a 
             href="/" 
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/80 border border-brand-beige/40 text-stone-600 hover:text-brand-beige-deep hover:bg-white transition-all shadow-sm font-medium text-sm group"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/80 border border-brand-lavender/40 text-stone-600 hover:text-brand-plum hover:bg-white transition-all shadow-sm font-medium text-sm group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Invitation
           </a>
-          <span className="px-4 py-1.5 rounded-full bg-brand-champagne border border-brand-beige/30 text-brand-beige-deep text-xs font-bold uppercase tracking-widest shadow-sm">
+          <span className="px-4 py-1.5 rounded-full bg-brand-rose border border-brand-lavender/30 text-brand-plum text-xs font-bold uppercase tracking-widest shadow-sm">
             Admin Dashboard
           </span>
         </div>
@@ -117,12 +117,12 @@ export const Admin: React.FC = () => {
         {/* Main Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
-            <Sparkles className="w-5 h-5 text-brand-gold animate-pulse" />
-            <span className="text-brand-beige-deep uppercase tracking-[0.5em] text-xs font-bold drop-shadow-sm">Invitation Generator</span>
-            <Sparkles className="w-5 h-5 text-brand-gold animate-pulse" />
+            <Sparkles className="w-5 h-5 text-brand-plum animate-pulse" />
+            <span className="text-brand-plum uppercase tracking-[0.5em] text-xs font-bold drop-shadow-sm">Invitation Generator</span>
+            <Sparkles className="w-5 h-5 text-brand-plum animate-pulse" />
           </div>
           <h1 className="text-5xl sm:text-6xl font-display text-stone-800 tracking-tight mb-4 drop-shadow-sm">
-            Wedding <span className="italic font-light text-brand-beige-deep">Admin Panel</span>
+            Wedding <span className="italic font-light text-brand-plum">Admin Panel</span>
           </h1>
           <p className="text-stone-500 font-serif italic text-lg max-w-xl mx-auto">
             Generate personalized invitation links for your guests with specific event access.
@@ -137,20 +137,20 @@ export const Admin: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7 bg-white/80 backdrop-blur-2xl p-8 sm:p-10 rounded-[2.5rem] border border-white shadow-[0_20px_50px_rgba(176,137,104,0.15)] relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-champagne via-brand-beige-deep to-brand-champagne" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-rose via-brand-plum to-brand-rose" />
 
             <form onSubmit={handleGenerate} className="space-y-8">
               {/* Guest Title & Name */}
               <div className="space-y-6">
                 <div>
                   <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 flex items-center gap-2 ml-1">
-                    <User className="w-4 h-4 text-brand-beige-deep" />
+                    <User className="w-4 h-4 text-brand-plum" />
                     Guest Title
                   </label>
                   <select
                     value={guestTitle}
                     onChange={(e) => setGuestTitle(e.target.value)}
-                    className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-beige/30 focus:border-brand-beige-deep/40 outline-none transition-all font-serif text-lg shadow-inner text-stone-800 cursor-pointer"
+                    className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-lavender/30 focus:border-brand-plum/40 outline-none transition-all font-serif text-lg shadow-inner text-stone-800 cursor-pointer"
                   >
                     <option value="Mr.">Mr.</option>
                     <option value="Mrs.">Mrs.</option>
@@ -165,7 +165,7 @@ export const Admin: React.FC = () => {
 
                 <div>
                   <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 flex items-center gap-2 ml-1">
-                    <User className="w-4 h-4 text-brand-beige-deep" />
+                    <User className="w-4 h-4 text-brand-plum" />
                     Guest Name
                   </label>
                   <input
@@ -174,7 +174,7 @@ export const Admin: React.FC = () => {
                     placeholder="Enter guest name..."
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-beige/30 focus:border-brand-beige-deep/40 outline-none transition-all font-serif italic text-lg shadow-inner text-stone-800 placeholder:text-stone-400"
+                    className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-lavender/30 focus:border-brand-plum/40 outline-none transition-all font-serif italic text-lg shadow-inner text-stone-800 placeholder:text-stone-400"
                   />
                 </div>
               </div>
@@ -182,7 +182,7 @@ export const Admin: React.FC = () => {
               {/* Event Invitation Selection */}
               <div>
                 <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-4 flex items-center gap-2 ml-1">
-                  <Calendar className="w-4 h-4 text-brand-beige-deep" />
+                  <Calendar className="w-4 h-4 text-brand-plum" />
                   Event Invitation
                 </label>
                 <div className="space-y-3">
@@ -196,13 +196,13 @@ export const Admin: React.FC = () => {
                       onClick={() => setSelectedEvent(evt.id)}
                       className={`flex items-center justify-between p-5 rounded-2xl border cursor-pointer transition-all ${
                         selectedEvent === evt.id
-                          ? 'bg-brand-champagne/40 border-brand-beige-deep shadow-md'
+                          ? 'bg-brand-rose/40 border-brand-plum shadow-md'
                           : 'bg-white/50 border-stone-200/60 hover:bg-white'
                       }`}
                     >
                       <div className="flex items-center gap-4">
                         <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                          selectedEvent === evt.id ? 'border-brand-beige-deep bg-brand-beige-deep' : 'border-stone-300 bg-white'
+                          selectedEvent === evt.id ? 'border-brand-plum bg-brand-plum' : 'border-stone-300 bg-white'
                         }`}>
                           {selectedEvent === evt.id && <div className="w-2 h-2 rounded-full bg-white" />}
                         </div>
@@ -219,9 +219,9 @@ export const Admin: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-stone-800 text-brand-champagne py-5 rounded-full font-sans tracking-[0.3em] font-bold text-xs uppercase hover:bg-stone-900 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3"
+                className="w-full bg-stone-800 text-brand-rose py-5 rounded-full font-sans tracking-[0.3em] font-bold text-xs uppercase hover:bg-stone-900 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3"
               >
-                <LinkIcon className="w-4 h-4 text-brand-gold" />
+                <LinkIcon className="w-4 h-4 text-brand-plum" />
                 Generate Invitation Link
               </button>
             </form>
@@ -237,7 +237,7 @@ export const Admin: React.FC = () => {
             {/* Active Generated Link Box */}
             <div className="bg-white/80 backdrop-blur-2xl p-8 rounded-[2.5rem] border border-white shadow-[0_20px_50px_rgba(176,137,104,0.15)] relative overflow-hidden">
               <h3 className="font-serif text-2xl text-stone-800 mb-4 flex items-center gap-2">
-                <LinkIcon className="w-5 h-5 text-brand-beige-deep" />
+                <LinkIcon className="w-5 h-5 text-brand-plum" />
                 Generated Link
               </h3>
               
@@ -250,7 +250,7 @@ export const Admin: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() => handleCopy(generatedUrl)}
-                      className="flex-1 bg-brand-beige-deep text-white py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-beige-deep/90 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95"
+                      className="flex-1 bg-brand-plum text-white py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-plum/90 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95"
                     >
                       {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       {copied ? 'Copied!' : 'Copy Link'}
@@ -279,7 +279,7 @@ export const Admin: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-2xl p-8 rounded-[2.5rem] border border-white shadow-[0_20px_50px_rgba(176,137,104,0.15)] relative overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-serif text-xl text-stone-800 flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-brand-beige-deep" />
+                  <Calendar className="w-5 h-5 text-brand-plum" />
                   Recent Links
                 </h3>
                 {recentLinks.length > 0 && (
@@ -292,7 +292,7 @@ export const Admin: React.FC = () => {
                   {recentLinks.map((link) => (
                     <div 
                       key={link.id} 
-                      className="p-4 rounded-2xl bg-stone-50 border border-stone-100 hover:border-brand-beige/40 transition-all group relative"
+                      className="p-4 rounded-2xl bg-stone-50 border border-stone-100 hover:border-brand-lavender/40 transition-all group relative"
                     >
                       <div className="flex justify-between items-start mb-1 pr-8">
                         <span className="font-serif font-bold text-stone-800 text-base">
@@ -300,13 +300,13 @@ export const Admin: React.FC = () => {
                         </span>
                         <span className="text-[10px] text-stone-400 font-sans">{link.createdAt}</span>
                       </div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-brand-champagne/60 text-brand-beige-deep text-[10px] font-medium mb-3">
+                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-brand-rose/60 text-brand-plum text-[10px] font-medium mb-3">
                         {getEventLabel(link.event)}
                       </span>
                       <div className="flex items-center gap-2 pt-2 border-t border-stone-200/60">
                         <button
                           onClick={() => handleCopy(link.url)}
-                          className="text-[11px] font-sans font-bold text-brand-beige-deep hover:underline flex items-center gap-1"
+                          className="text-[11px] font-sans font-bold text-brand-plum hover:underline flex items-center gap-1"
                         >
                           <Copy className="w-3 h-3" /> Copy URL
                         </button>

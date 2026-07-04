@@ -22,15 +22,9 @@ export default function App() {
 
   const fullInviteeName = `${titleParam} ${nameParam}`.trim();
 
-  let eventLabel = 'Our Wedding Celebrations';
-  if (eventParam === 'poruwa') eventLabel = 'Poruwa Ceremony & Wedding Function';
-  if (eventParam === 'homecoming') eventLabel = 'Homecoming Function';
-  if (eventParam === 'both') eventLabel = 'Wedding & Homecoming Celebrations';
+  let eventLabel = 'Our Wedding Celebration';
 
-  const weddingDate =
-    eventParam === 'homecoming'
-      ? new Date('2026-07-24T19:00:00')
-      : new Date('2026-07-22T08:00:00');
+  const weddingDate = new Date('2026-08-14T10:15:00');
 
   useEffect(() => {
     if (isAdminRoute()) return;
@@ -48,7 +42,7 @@ export default function App() {
 
   const ensureAudio = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = new Audio('/Austin Giorgio - Moon (Official Video) (mp3cut.net).mp3');
+      audioRef.current = new Audio('/WhatsApp Audio 2026-07-05 at 01.54.10.mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.3;
       audioRef.current.preload = 'none';

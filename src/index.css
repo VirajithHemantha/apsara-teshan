@@ -2,15 +2,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Beige Color Palette */
-  --color-brand-beige: #d4b896;
-  --color-brand-beige-deep: #b08968;
-  --color-brand-champagne: #f5ebe0;
-  --color-brand-ivory: #faf6f1;
-  --color-brand-gold: #c9a96e;
-  --color-brand-gold-light: #e6d5b8;
-  --color-brand-mocha: #8b6f47;
-  --color-brand-sand: #e8ddd3;
+  /* Purple/Pink Color Palette */
+  --color-brand-plum: #78617d;
+  --color-brand-lavender: #b19ab7;
+  --color-brand-rose: #f4c6c6;
+  --color-brand-blush: #fee9e8;
 
   --font-serif: "Cormorant Garamond", serif;
   --font-display: "Great Vibes", cursive;
@@ -19,7 +15,7 @@
 }
 
 :root {
-  background-color: var(--color-brand-ivory);
+  background-color: var(--color-brand-blush);
   color: #292524;
 }
 
@@ -54,14 +50,14 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-brand-ivory);
+  background: var(--color-brand-blush);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-brand-beige);
+  background: var(--color-brand-lavender);
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-brand-beige-deep);
+  background: var(--color-brand-plum);
 }
