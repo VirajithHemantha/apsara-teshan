@@ -463,7 +463,7 @@ export function EnvelopeOpening({
 
               <div className="text-details">
                 Request the honour of your presence<br />
-                as they unite in the sacrament of holy matrimony<br />
+                to celebrate their marriage at<br />
                 <span className="text-church">Centrium Ballroom, Avenra Gardens</span><br />
                 Negombo
               </div>
