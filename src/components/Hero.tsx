@@ -108,15 +108,7 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
             <div className="hidden sm:block h-[1px] w-16 bg-gradient-to-r from-transparent via-brand-plum to-transparent" />
           </div>
 
-          <div className="inline-block mt-2 sm:mt-6 w-full sm:w-auto px-4 sm:px-0">
-            <div className="px-8 sm:px-16 py-4 sm:py-6 bg-brand-lavender border border-brand-lavender/50 rounded-full whitespace-nowrap flex items-center justify-center">
-              <span className="text-[12px] sm:text-2xl font-serif text-brand-blush tracking-[0.1em] sm:tracking-[0.2em] font-bold flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-center">
-                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-plum flex-shrink-0" />
-                Thursday 13 August 2026 At 03:30 PM
-                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-plum flex-shrink-0" />
-              </span>
-            </div>
-          </div>
+
         </motion.div>
       </motion.div>
 

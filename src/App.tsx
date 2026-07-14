@@ -42,7 +42,7 @@ export default function App() {
 
   const ensureAudio = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = new Audio('/paulyudin-wedding-485932.mp3');
+      audioRef.current = new Audio('/Austin Giorgio - Moon (Official Video) (mp3cut.net).mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.3;
       audioRef.current.preload = 'none';
