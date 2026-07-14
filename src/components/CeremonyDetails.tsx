@@ -41,48 +41,55 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
             {/* Premium Timeline */}
             <div className="relative space-y-12 ml-10 sm:ml-12 border-l-[1.5px] border-brand-lavender/30 pl-10 sm:pl-12 py-4">
 
-              {/* Calendar */}
-              <div className="relative group">
+              {/* Date */}
+              <div className="relative group flex items-center min-h-[48px]">
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-lavender/40 shadow-lg flex items-center justify-center group-hover:border-brand-plum group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
                   <Calendar className="w-5 h-5 text-brand-plum group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-plum transition-colors duration-500">
-                    Thursday, August 13
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 group-hover:text-brand-plum transition-colors duration-500">
+                    Date: August 13, 2026
                   </h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">
-                    The Year Two Thousand Twenty Six
-                  </p>
                 </div>
               </div>
 
-              {/* Time */}
+              {/* Church Ceremony */}
               <div className="relative group">
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-lavender/40 shadow-lg flex items-center justify-center group-hover:border-brand-plum group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
                   <Clock className="w-5 h-5 text-brand-plum group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-plum transition-colors duration-500">
-                    From 06.30 PM Onwards
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-3 group-hover:text-brand-plum transition-colors duration-500">
+                    Church Ceremony
                   </h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">
-                    Commencement of the Holy Mass at 03.30 PM
-                  </p>
+                  <div className="space-y-1.5 text-stone-500/90 font-serif text-base sm:text-lg">
+                    <p>
+                      <span className="font-semibold text-stone-700">Time:</span> 03.30 PM
+                    </p>
+                    <p className="leading-relaxed">
+                      <span className="font-semibold text-stone-700">Venue:</span> St. Mary's Church,<br className="hidden sm:block" /> Negombo
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Venue */}
+              {/* Wedding Function */}
               <div className="relative group">
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-lavender/40 shadow-lg flex items-center justify-center group-hover:border-brand-plum group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
                   <MapPin className="w-5 h-5 text-brand-plum group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-plum transition-colors duration-500">
-                    Centrium Ballroom, Avenra Gardens
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-3 group-hover:text-brand-plum transition-colors duration-500">
+                    Wedding Function
                   </h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">
-                    Negombo
-                  </p>
+                  <div className="space-y-1.5 text-stone-500/90 font-serif text-base sm:text-lg">
+                    <p>
+                      <span className="font-semibold text-stone-700">Time:</span> 06.30 PM Onwards
+                    </p>
+                    <p className="leading-relaxed">
+                      <span className="font-semibold text-stone-700">Venue:</span> Centrium Ballroom, Avenra Gardens,<br className="hidden sm:block" /> Negombo
+                    </p>
+                  </div>
                 </div>
               </div>
 

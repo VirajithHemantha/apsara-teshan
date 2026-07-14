@@ -8,15 +8,6 @@ export const CoupleDetails: React.FC = () => {
       {/* Decorative ambient background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-radial from-brand-lavender/15 to-transparent rounded-full blur-[100px] pointer-events-none z-0" />
 
-      {/* Watermark Background Image */}
-      <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-10 mix-blend-multiply">
-        <img 
-          src="/WhatsApp%20Image%202026-07-09%20at%2021.34.28.jpeg" 
-          alt="Watermark background" 
-          className="w-full h-full object-cover object-top sm:object-center sepia contrast-125" 
-        />
-      </div>
-
       <div className="text-center mb-16 sm:mb-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
